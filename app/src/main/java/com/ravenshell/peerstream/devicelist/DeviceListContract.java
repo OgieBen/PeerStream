@@ -11,9 +11,9 @@ import java.util.List;
 public interface DeviceListContract {
 
     interface View {
-        void displayView(View view);
-        void hideView(View view);
         void displayDevices(List<Device> devices);
+        void hideLoader();
+        void displayLoader();
     }
 
     interface Action {

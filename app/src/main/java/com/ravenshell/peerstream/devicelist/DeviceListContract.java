@@ -19,6 +19,5 @@ public interface DeviceListContract {
     interface Action {
         void beginSearch();
         void refresh();
-
     }
 }

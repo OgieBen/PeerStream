@@ -14,12 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ravenshell.peerstream.R;
-import com.ravenshell.peerstream.wificonnector.Device;
-
-import java.util.List;
 
 public class DeviceListActivity extends AppCompatActivity
-        implements DeviceListContract.View, NavigationView.OnNavigationItemSelectedListener {
+        implements  NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +42,15 @@ public class DeviceListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+       initFragment();
+    }
+
+    private void initFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container, DeviceListFragment.newInstance("", ""))
+                .commit();
     }
 
     @Override
@@ -105,18 +111,4 @@ public class DeviceListActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void displayDevices(List<Device> devices) {
-
-    }
-
-    @Override
-    public void hideLoader() {
-
-    }
-
-    @Override
-    public void displayLoader() {
-
-    }
 }

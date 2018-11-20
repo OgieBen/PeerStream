@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.ravenshell.peerstream.devicelist.DeviceListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/device_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        tools:listitem="@layout/device_list_item" />
 </FrameLayout>

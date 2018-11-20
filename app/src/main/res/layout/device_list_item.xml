@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_name"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:visibility="visible"
+        tools:text="Device Name" />
+
+    <TextView
+        android:id="@+id/device_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_details"
+        android:textAppearance="@android:style/TextAppearance.Material.Small" />
 </android.support.constraint.ConstraintLayout>

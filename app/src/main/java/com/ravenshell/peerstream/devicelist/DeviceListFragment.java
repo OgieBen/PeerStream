@@ -2,19 +2,24 @@ package com.ravenshell.peerstream.devicelist;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ravenshell.peerstream.R;
+import com.ravenshell.peerstream.wificonnector.Device;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DeviceListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeviceListFragment extends Fragment {
+public class DeviceListFragment extends Fragment implements DeviceListContract.View {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -23,6 +28,7 @@ public class DeviceListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private DeviceListPresenter mPresenter;
 
 
     public DeviceListFragment() {
@@ -54,6 +60,8 @@ public class DeviceListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mPresenter = new DeviceListPresenter(this);
     }
 
     @Override
@@ -63,4 +71,23 @@ public class DeviceListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_device_list, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void displayDevices(List<Device> devices) {
+
+    }
+
+    @Override
+    public void hideLoader() {
+
+    }
+
+    @Override
+    public void displayLoader() {
+
+    }
 }

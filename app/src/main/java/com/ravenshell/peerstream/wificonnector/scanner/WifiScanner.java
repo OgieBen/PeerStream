@@ -28,7 +28,7 @@ public class WifiScanner {
     }
 
 
-    void setupWifiManager(final Scanner.Callback scanner){
+    public void setupWifiManager(final Scanner.Callback scanner){
         mWifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
 
         mBroadcastReceiver = new BroadcastReceiver() {

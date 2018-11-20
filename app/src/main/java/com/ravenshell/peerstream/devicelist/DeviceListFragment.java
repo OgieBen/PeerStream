@@ -1,6 +1,7 @@
 package com.ravenshell.peerstream.devicelist;
 
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ravenshell.peerstream.R;
 import com.ravenshell.peerstream.wificonnector.Device;
+import com.ravenshell.peerstream.wificonnector.scanner.WifiScanner;
 
 import java.util.List;
 
@@ -61,7 +64,8 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        mPresenter = new DeviceListPresenter(this);
+        mPresenter = new DeviceListPresenter(getContext(), this, new WifiScanner(getContext(), new IntentFilter()));
+
     }
 
     @Override
@@ -74,11 +78,16 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter.beginSearch();
     }
 
     @Override
     public void displayDevices(List<Device> devices) {
-
+        if (devices != null){
+            Toast.makeText(getContext(), "Found " + devices.size() + " devices", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(getContext(), "Error finding device", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -88,6 +97,11 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
 
     @Override
     public void displayLoader() {
+
+    }
+
+    @Override
+    public void displayMsg(String str) {
 
     }
 }

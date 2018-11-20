@@ -1,9 +1,10 @@
 package com.ravenshell.peerstream.wificonnector;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 
-import com.ravenshell.peerstream.wificonnector.scanner.Scanner;
+import com.ravenshell.peerstream.wificonnector.scanner.ScannerContract;
 import com.ravenshell.peerstream.wificonnector.scanner.WifiScanner;
 
 import org.junit.Before;
@@ -23,17 +24,20 @@ import static org.junit.Assert.assertNotNull;
 public class WifiScannerTest {
 
     @Mock
-    Context context;
+    Context mContext;
+
+    @Mock
+    IntentFilter mIntentFilter;
 
     private WifiScanner mWifiScanner;
 
     @Captor
-    ArgumentCaptor<Scanner.Callback> mScannerCallback;
+    ArgumentCaptor<ScannerContract.Callback> mScannerCallback;
 
     @Before
     public void setUp() throws Exception {
          MockitoAnnotations.initMocks(this);
-         mWifiScanner = new WifiScanner(context);
+         mWifiScanner = new WifiScanner(mContext, mIntentFilter);
 
         //wifiScanner.setupWifiManager();
     }

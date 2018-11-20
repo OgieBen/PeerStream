@@ -1,5 +1,7 @@
 package com.ravenshell.peerstream.devicelist;
 
+import android.net.wifi.ScanResult;
+
 import com.ravenshell.peerstream.wificonnector.Device;
 
 import java.util.List;
@@ -14,10 +16,13 @@ public interface DeviceListContract {
         void displayDevices(List<Device> devices);
         void hideLoader();
         void displayLoader();
+        void displayMsg(String str);
     }
 
     interface Action {
         void beginSearch();
         void refresh();
+        void getDevices(List<ScanResult> devices);
+        void handleSearchError();
     }
 }

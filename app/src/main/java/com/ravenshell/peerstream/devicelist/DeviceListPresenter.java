@@ -1,14 +1,13 @@
 package com.ravenshell.peerstream.devicelist;
 
 import android.content.Context;
-import android.net.wifi.ScanResult;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 
 import com.ravenshell.peerstream.mvp.BasePresenter;
-import com.ravenshell.peerstream.wificonnector.Device;
 import com.ravenshell.peerstream.wificonnector.scanner.ScannerContract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ogie on 11/19/2018.
@@ -19,6 +18,7 @@ public class DeviceListPresenter implements DeviceListContract.Action, BasePrese
 
     private final DeviceListContract.View mView;
     private final ScannerContract mScanner;
+    private ArrayList<WifiP2pDevice> mDevices;
 
     public DeviceListPresenter(Context ctx, DeviceListContract.View view, ScannerContract scanner) {
         mView = view;
@@ -32,12 +32,15 @@ public class DeviceListPresenter implements DeviceListContract.Action, BasePrese
     }
 
     @Override
-    public void getDevices(List<ScanResult> devices) {
+    public void getDevices(WifiP2pDeviceList devices) {
         mView.hideLoader();
 
+        mDevices = new ArrayList<WifiP2pDevice>();
+        for(WifiP2pDevice device: devices.getDeviceList()){
+            mDevices.add(device);
+        }
 
-        // convert ScanResult to Device before display
-         mView.displayDevices(new ArrayList<Device>());
+         mView.displayDevices(mDevices);
     }
 
     @Override

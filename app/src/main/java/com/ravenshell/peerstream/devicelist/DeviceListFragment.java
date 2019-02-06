@@ -1,20 +1,26 @@
 package com.ravenshell.peerstream.devicelist;
 
 
+import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ravenshell.peerstream.R;
-import com.ravenshell.peerstream.wificonnector.Device;
+import com.ravenshell.peerstream.adapters.DevicesRecyclerViewAdapter;
+import com.ravenshell.peerstream.utils.broadcastreceivers.WifiP2pBroadcastReceiver;
 import com.ravenshell.peerstream.wificonnector.scanner.WifiScanner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +38,12 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     private String mParam1;
     private String mParam2;
     private DeviceListPresenter mPresenter;
+    private IntentFilter mIntentFilter;
+    private WifiP2pBroadcastReceiver mP2pBroadcastReceiver;
+    private WifiP2pManager mWifiP2pManager;
+    private WifiP2pManager.Channel mChannel;
+    private RecyclerView mDeviceRecyclerView;
+    private DevicesRecyclerViewAdapter mAdapter;
 
 
     public DeviceListFragment() {
@@ -65,7 +77,8 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
         }
 
         mPresenter = new DeviceListPresenter(getContext(), this, new WifiScanner(getContext(), new IntentFilter()));
-
+        mAdapter = new DevicesRecyclerViewAdapter(new ArrayList<WifiP2pDevice>(0));
+        setListeners();
     }
 
     @Override
@@ -78,11 +91,29 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mDeviceRecyclerView = (RecyclerView)view.findViewById(R.id.devices_recyclerview);
         mPresenter.beginSearch();
     }
 
     @Override
-    public void displayDevices(List<Device> devices) {
+    public void onResume() {
+        super.onResume();
+        mP2pBroadcastReceiver = new WifiP2pBroadcastReceiver(mWifiP2pManager, mChannel, mPresenter);
+        getContext().registerReceiver(mP2pBroadcastReceiver, mIntentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getContext().unregisterReceiver(mP2pBroadcastReceiver);
+    }
+
+    public void setIsWifiEnabled(Boolean state){
+
+    }
+
+    @Override
+    public void displayDevices(List<WifiP2pDevice> devices) {
         if (devices != null){
             Toast.makeText(getContext(), "Found " + devices.size() + " devices", Toast.LENGTH_LONG).show();
             return;
@@ -104,4 +135,18 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     public void displayMsg(String str) {
 
     }
+
+
+    void setListeners() {
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mWifiP2pManager = (WifiP2pManager) getContext().getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mWifiP2pManager.initialize(getContext(), getActivity().getMainLooper(), null );
+    }
+
+
 }

@@ -12,10 +12,19 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by ogie on 11/20/2018.
@@ -33,6 +42,9 @@ public class DeviceListPresenterTest {
 
     @Mock
     ScannerContract mScannerContract;
+
+    @Mock
+    OutputStream mStream;
 
     private DeviceListPresenter mDeviceListPresenter;
 
@@ -76,6 +88,44 @@ public class DeviceListPresenterTest {
 
     @Test
     public void onViewAttached() throws Exception {
+
+
     }
+
+    @Test
+    public void experiment() throws Exception {
+
+        // simple test used to experiment with when...thenReturn apis
+        Comparable<Integer> c = mock(Comparable.class);
+        when(c.compareTo(anyInt())).thenReturn(-1);
+
+        assertEquals(-1, c.compareTo(3));
+
+
+        // using spy
+        Properties prop = mock(Properties.class);
+        Properties spyProp = spy(prop);
+
+        // used to throw exceptions
+        when(prop.get(anyString())).thenThrow(new IllegalArgumentException());
+
+        try{
+            prop.get(anyString());
+        }catch (IllegalArgumentException e){
+
+        }
+
+        // do return 32 when spyProp calls get("Elite")
+        doReturn(32).when(spyProp).get("delibrate");
+        // doThrow(new IllegalArgumentException()).when(spyProp).store(mStream, "delibrate");
+        // verify(prop).store(mStream, "delibrate");
+
+
+        assertEquals(32, spyProp.get("delibrate"));
+    }
+
+
+
+
 
 }
